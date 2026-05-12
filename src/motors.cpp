@@ -24,13 +24,13 @@ void loop()
   {
     motors.setLeftSpeed(speed);
     motors.setRightSpeed(speed);
-    delay(5);
+    delay(2);
   }
   for (int speed = 400; speed >= 0; speed--)
   {
     motors.setLeftSpeed(speed);
     motors.setRightSpeed(speed);
-    delay(5);
+    delay(2);
 
   }
 

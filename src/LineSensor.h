@@ -14,9 +14,12 @@ void calibrateLineSensors();
 void printReadingsToSerial();
 bool isCalibrated() const;
 char getLastError() const;
+int currentLinePosition() const;
 
 private:
 Zumo32U4LineSensors sensors;
+unsigned int sensorValues(NUM_SENSORS);
+
 
 
 

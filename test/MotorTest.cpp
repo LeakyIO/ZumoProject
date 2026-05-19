@@ -15,13 +15,12 @@ MotorTest::~MotorTest() {
   motors.setRightSpeed(0);
 }
 
-/*!
- * @brief Drives the robot forward at a specified speed.
- * @param speed The speed at which to drive forward.
- */
-
-void MotorTest::forwardLeft(int16_t speed) {
+void MotorTest::setLeftSpeed(int16_t speed) {
     motors.setLeftSpeed(speed);
+}
+
+void MotorTest::setRightSpeed(int16_t speed) {
+    motors.setRightSpeed(speed);
 }
 
 /*!

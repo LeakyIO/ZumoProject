@@ -5,31 +5,21 @@
 #include <Zumo32U4Motors.h>
 #include <Zumo32U4Encoders.h>
 
-class MotorController {
+class MotorTest {
     private:
         static Zumo32U4Motors motors;
         static Zumo32U4Encoders encoders;
 
-    public:
+    public:  
 
-        /*!
-         * @brief Constructor for the MotorController class.
-         */
         MotorTest();
 
-        /*!
-         * @brief Destructor for the MotorController class.
-         */
         ~MotorTest();
 
 
-        void leftForward(int16_t speed);
-    
-        void leftBackward(int16_t speed);
-
-        void rightForward(int16_t speed);
-
-        void rightBackward(int16_t speed);
+        void setLeftSpeed(int16_t speed);
+        
+        void setRightSpeed(int16_t speed);
 
         /*!
          * @brief Stops the robot.

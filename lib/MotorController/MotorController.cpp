@@ -1,10 +1,6 @@
-#include <Arduino.h>
 #include "MotorController.h"
-#include <Zumo32U4Motors.h>
-#include <Zumo32U4Encoders.h>
 
-static Zumo32U4Motors motors;
-static Zumo32U4Encoders encoders;
+
 
 /*!
  * @brief Constructor for the MotorController class.

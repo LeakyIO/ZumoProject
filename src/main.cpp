@@ -30,7 +30,6 @@ void loop() {
     if (buttonB.getSingleDebouncedPress()) {
         delay(500); // debounce delay
         motors.driveRevolutions(8.0, -200);
-        delay(1000);
     } else {
         motors.stop();
     }

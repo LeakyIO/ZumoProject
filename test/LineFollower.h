@@ -1,14 +1,14 @@
 #include <Arduino.h>
 #include "Zumo32U4LineSensors.h"
 
-class LineFollowerTest {
+class LineFollower {
     private:
         static Zumo32U4LineSensors lineSensors;
 
     public:
-        LineFollowerTest();
+        LineFollower();
 
-        ~LineFollowerTest();
+        ~LineFollower();
 
         void followLine();
         void searchLine();

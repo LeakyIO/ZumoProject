@@ -1,19 +1,13 @@
-#include <Arduino.h>
-#include "Zumo32U4LineSensors.h"
-#include "MotorController.h"
+#pragma once
+#include <MotorController.h>
+#include <LineSensor.h>
 
 class LineFollower {
-    private:
-        static Zumo32U4LineSensors lineSensors;
-        static MotorController motorController;
-
     public:
-        LineFollower();
-
-        ~LineFollower();
-
-        void followLine();
-        void searchLine();
-
-        bool detected();
+        LineFollower(MotorController& motors, LineSensor& sensor);
+        void follow();
+    private:
+        MotorController& motors;
+        LineSensor& sensor;
+        int16_t lastError = 0;
 };

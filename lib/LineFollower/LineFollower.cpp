@@ -1,6 +1,6 @@
 #include "LineFollower.h"
 
-const uint16_t maxSpeed = 200;
+const uint16_t maxSpeed = 400;
 
 LineFollower::LineFollower(MotorController& motors, LineSensor& sensor)
     : motors(motors), sensor(sensor) {}

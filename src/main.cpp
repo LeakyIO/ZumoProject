@@ -17,7 +17,7 @@ LineFollower lineFollower(motors, lineSensor);
 bool following = false;
 
 
-void calibrateSensors(){
+void calibrateLineSensors(){
     delay(1000);
     for(uint16_t i = 0; i < 120; i++){
         if (i > 30 && i <= 90){
@@ -36,10 +36,11 @@ void setup(){
     Serial.begin(9600);
 
     lineSensor.initialize();
+    
+    //buzzer.play("T90 L8 O3 aaa f16>c16 a f16>c16 a");
 
-    calibrateSensors();
+    calibrateLineSensors();
 
-    buzzer.play("L16 cdegreg4");
 }
 
 

@@ -8,17 +8,16 @@ LineFollower::LineFollower(MotorController& motors, LineSensor& sensor)
 // }
 
 void LineFollower::follow() {
-    int16_t position = sensor.readLine();
 
-    // if (sensor.getLineReflectance() == 0) {
-    //     if (abs(lastError) < 500)
-    //         motors.setSpeeds(maxSpeed / 2, maxSpeed / 2);
-    //     else if (lastError > 0)
-    //         motors.setSpeeds(maxSpeed / 2, -(maxSpeed / 2));
-    //     else
-    //         motors.setSpeeds(-(maxSpeed / 2), maxSpeed / 2);
-    //     return;
-    // }
+    int16_t position = sensor.readLine();
+    int16_t error = position - 2000;
+    int16_t speed = constrain(maxSpeed - abs(error) / 9, 200, maxSpeed);
+    int16_t speedDifference = error / 2 + 7 * (error - lastError);
+    lastError = error;
+
+    int16_t leftSpeed  = constrain(speed + speedDifference, -400, speed);
+    int16_t rightSpeed = constrain(speed - speedDifference, -400, speed);
+    motors.setSpeeds(leftSpeed, rightSpeed);
 
     if (sensor.getMiddleReflectance() < THRESHOLD_LINE) {
         if (sensor.getLeftReflectance() > THRESHOLD_LINE) {
@@ -39,12 +38,14 @@ void LineFollower::follow() {
         }
     }
 
-    int16_t error = position - 2000;
-    int16_t speed = constrain(maxSpeed - abs(error) / 9, 200, maxSpeed);
-    int16_t speedDifference = error / 2 + 7 * (error - lastError);
-    lastError = error;
+    if (sensor.getLineReflectance() == 0) {
+        if (abs(lastError) < 500)
+            motors.setSpeeds(maxSpeed / 2, maxSpeed / 2);
+        else if (lastError > 0)
+            motors.setSpeeds(maxSpeed / 2, -(maxSpeed / 2));
+        else
+            motors.setSpeeds(-(maxSpeed / 2), maxSpeed / 2);
+        return;
+    }
 
-    int16_t leftSpeed  = constrain(speed + speedDifference, -400, speed);
-    int16_t rightSpeed = constrain(speed - speedDifference, -400, speed);
-    motors.setSpeeds(leftSpeed, rightSpeed);
 }

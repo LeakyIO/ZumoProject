@@ -1,0 +1,80 @@
+@startuml follow_sequence
+title LineFollower::follow() Sequence Diagram
+
+actor "main.cpp\n(loop)" as Main
+participant "LineFollower" as LF
+participant "LineSensor" as LS
+participant "Zumo32U4LineSensors" as Z32
+participant "MotorController" as MC
+participant "Zumo32U4Motors" as ZM
+
+Main -> LF : follow()
+activate LF
+
+== PD Control ==
+LF -> LS : readLine()
+activate LS
+LS -> Z32 : readCalibrated(sensorValues)
+return position
+
+LF -> LF : compute error, speed, speedDifference
+LF -> MC : setSpeeds(leftSpeed, rightSpeed)
+activate MC
+MC -> ZM : setSpeeds(leftSpeed, rightSpeed)
+deactivate MC
+
+== Recovery: line lost under middle sensor ==
+LF -> LS : getMiddleReflectance()
+return middleValue
+
+alt middleValue < THRESHOLD_LINE
+
+    LF -> LS : getLeftReflectance()
+    return leftValue
+
+    alt leftValue > THRESHOLD_LINE (line is left)
+        loop while middleReflectance < THRESHOLD_LINE
+            LF -> MC : setSpeeds(-100, 100)
+            MC -> ZM : setSpeeds(-100, 100)
+            LF -> LS : readLine()
+            LS -> Z32 : readCalibrated(sensorValues)
+        end
+        LF -> LF : lastError = 0
+        LF --> Main : return
+    end
+
+    LF -> LS : getRightReflectance()
+    return rightValue
+
+    alt rightValue > THRESHOLD_LINE (line is right)
+        loop while middleReflectance < THRESHOLD_LINE
+            LF -> MC : setSpeeds(100, -100)
+            MC -> ZM : setSpeeds(100, -100)
+            LF -> LS : readLine()
+            LS -> Z32 : readCalibrated(sensorValues)
+        end
+        LF -> LF : lastError = 0
+        LF --> Main : return
+    end
+end
+
+== Recovery: no line detected at all ==
+LF -> LS : getLineReflectance()
+return avgReflectance
+
+alt avgReflectance == 0
+    alt |lastError| < 500
+        LF -> MC : setSpeeds(maxSpeed/2, maxSpeed/2)
+        MC -> ZM : setSpeeds(150, 150)
+    else lastError > 0
+        LF -> MC : setSpeeds(maxSpeed/2, -maxSpeed/2)
+        MC -> ZM : setSpeeds(150, -150)
+    else lastError <= 0
+        LF -> MC : setSpeeds(-maxSpeed/2, maxSpeed/2)
+        MC -> ZM : setSpeeds(-150, 150)
+    end
+    LF --> Main : return
+end
+
+deactivate LF
+@enduml

@@ -11,6 +11,7 @@
 #include "TiltSensor.h"
 #include <Arduino.h>
 #include <math.h>
+#include "CubePush.h"
 
 
 
@@ -22,6 +23,8 @@ LineSensor lineSensor;
 Zumo32U4IMU imu;
 Zumo32U4Encoders encoders;
 MotorController motors;
+CubePush push;
+
 
 LineFollower lineFollower(motors, lineSensor);
 
@@ -133,11 +136,13 @@ void loop() {
         motors.stop();
     }
     if (buttonC.isPressed()) {
-        delay(300);
-        printing = !printing;
+        following = false;
+        push.begin();
     }
 
     if (following) lineFollower.follow();
+    push.update(); 
+
 
     if (printing) {
         lineSensor.readLine();

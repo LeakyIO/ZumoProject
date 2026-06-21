@@ -77,3 +77,20 @@ LineColor LineSensor::detectLeftColor() {
 LineColor LineSensor::detectRightColor() {
     return debouncedColor(getRightReflectance());
 }
+
+
+LineColor LineSensor::detectGrijs()
+{
+  uint16_t left = getLeftReflectance();
+  uint16_t right = getRightReflectance();
+
+  bool leftIsGrey = (left >= 500 && left <= 750);
+  bool rightIsGrey = (right >= 500 && right <= 750);
+
+  if (leftIsGrey && rightIsGrey)
+  {
+    return LineColor::GREY;
+  }
+
+  return LineColor::UNKNOWN;
+}

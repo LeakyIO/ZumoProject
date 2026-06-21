@@ -21,6 +21,7 @@ class LineSensor {
         LineColor detectColor();
         LineColor detectLeftColor();
         LineColor detectRightColor();
+        LineColor detectGrijs();
         uint16_t getLineReflectance();
         uint16_t getLeftReflectance();
         uint16_t getMiddleReflectance();

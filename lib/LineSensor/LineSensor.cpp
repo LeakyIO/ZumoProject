@@ -74,6 +74,7 @@ LineColor LineSensor::detectLeftColor() {
     return debouncedColor(getLeftReflectance());
 }
 
+
 LineColor LineSensor::detectRightColor() {
     return debouncedColor(getRightReflectance());
 }

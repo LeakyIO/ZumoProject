@@ -1,0 +1,69 @@
+@startuml class_diagram
+title Line Following - Class Diagram
+
+skinparam monochrome true
+skinparam shadowing false
+skinparam classBackgroundColor white
+skinparam classBorderColor black
+skinparam ArrowColor black
+hide circle
+skinparam classAttributeIconSize 0
+
+class LineFollower {
+    - motors : MotorController&
+    - sensor : LineSensor&
+    - lastError : int16_t
+    - maxSpeed : int16_t
+    + LineFollower(motors : MotorController&, sensor : LineSensor&)
+    + follow() : void
+    - greenSpeed() : int16_t
+}
+
+class LineSensor {
+    - sensors : Zumo32U4LineSensors
+    - sensorValues : unsigned int[NUM_SENSORS]
+    - _pendingColor : LineColor
+    - _confirmedColor : LineColor
+    - _pendingCount : uint8_t
+    + initialize() : void
+    + calibrate() : void
+    + readLine() : int16_t
+    + detectColor() : LineColor
+    + detectLeftColor() : LineColor
+    + detectRightColor() : LineColor
+    + detectGrijs() : LineColor
+    + getLineReflectance() : uint16_t
+    + getLeftReflectance() : uint16_t
+    + getMiddleReflectance() : uint16_t
+    + getRightReflectance() : uint16_t
+    - colorFromReflectance(r : uint16_t) : LineColor
+    - debouncedColor(r : uint16_t) : LineColor
+}
+
+class MotorController {
+    - motors : Zumo32U4Motors
+    - encoder : Encoder
+    + MotorController()
+    + ~MotorController()
+    + setLeftSpeed(speed : int16_t) : void
+    + setRightSpeed(speed : int16_t) : void
+    + setSpeeds(leftSpeed : int16_t, rightSpeed : int16_t) : void
+    + stop() : void
+    + driveRevolutions(revs : float) : void
+}
+
+enum LineColor {
+    UNKNOWN
+    GREEN
+    GREY
+    BROWN
+}
+
+' LineFollower holds references (association), it does not own these objects
+LineFollower o--> MotorController : motors
+LineFollower o--> LineSensor : sensor
+
+' LineSensor produces / uses LineColor values
+LineSensor ..> LineColor : uses
+
+@enduml
